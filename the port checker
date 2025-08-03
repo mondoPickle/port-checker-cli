@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+import socket
+import argparse
+
+def check_port(host: str, port: int, timeout: float = 3.0) -> bool:
+    """Check if a TCP port is open on a host."""
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except (socket.timeout, ConnectionRefusedError, OSError):
+        return False
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Check if a TCP port is open on a host (Python 3.12+)."
+    )
+    parser.add_argument("host", help="Target host (IP or domain)")
+    parser.add_argument("port", type=int, help="Port number to check")
+    args = parser.parse_args()
+
+    print(f"🔍 Checking {args.host}:{args.port} ...")
+
+    if check_port(args.host, args.port):
+        print("✅ Port is OPEN")
+    else:
+        print("❌ Port is CLOSED or unreachable")
+
+if __name__ == "__main__":
+    main()
